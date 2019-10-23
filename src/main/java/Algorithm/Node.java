@@ -25,12 +25,12 @@ public class Node {
         parent = null; ///vážně možná upravit
         dataElements = new DataElement[ORDER -1];
         
-        addDataElement(dataElement);
+        add(dataElement);
     }
     
     
 //METHODS
-    private void addDataElement(DataElement dataElement){
+    public final void add(DataElement dataElement){
         if(!isFull()){
             dataElements[dataElementsNumber] = dataElement;
             dataElementsNumber++;
@@ -42,9 +42,7 @@ public class Node {
         }
     }
     
-    public void add(DataElement dataElement){
-        addDataElement(dataElement);
-    }
+    
     
     public void addChild(Node child){
         if(!childrenIsFull()){
