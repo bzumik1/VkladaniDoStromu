@@ -9,7 +9,7 @@ package Algorithm;
  *
  * @author jakub
  */
-public class DataElement {
+public class DataElement implements Comparable<DataElement>{
 //ATTRIBUTES
     int identifier;
 //CONSTRUCTOR
@@ -27,5 +27,13 @@ public class DataElement {
     @Override
     public String toString(){
         return "Data ["+identifier+"]";
+    }
+    
+    //implementing Comparable interface to be abble for sorting
+    @Override
+    public int compareTo(DataElement o) {
+        Integer identifierThis = identifier;
+        Integer identifierIn = o.getIdentifier();
+        return identifierThis.compareTo(identifierIn);
     }
 }

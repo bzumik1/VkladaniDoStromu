@@ -6,12 +6,13 @@
 package Algorithm;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
  * @author jakub
  */
-public class Tree {
+public class Tree { 
 //ATTRIBUTES
     private Node root;
     private int depth;
@@ -96,7 +97,7 @@ public class Tree {
     
     
     public String getOneLevelAsString(int depth){
-        Node[] parents;
+        List<Node> parents;
         String tempString = "";
         var temp = root;
         int ch = 0;
@@ -116,7 +117,7 @@ public class Tree {
         }
         else if(depth>1) {
             for(int i = 0;i<(depth-2);i++){ //looks for grandparents in depth - 2
-                temp = temp.getChildren()[0];
+                temp = temp.getChildren().get(0);
             }
             parents = temp.getChildren();
             for(Node parent:parents){ //Could be done more effitiently
@@ -153,3 +154,5 @@ public class Tree {
     }
     
 }
+
+

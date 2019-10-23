@@ -3,27 +3,31 @@ package Algorithm;
 //IMPORT
 import MyExceptions.*;
 import HelpClasses.BubbleSort;
+import java.util.Arrays;
+import java.util.List;
+import java.util.ArrayList;
+import java.util.Collections;
 
 /**
  *
  * @author jakub
  */
-public class Node {
+public class Node implements Comparable<Node>{
 //ATTRIBUTES
     static final int ORDER = 4;
-    private int childrenNumber;
-    private int dataElementsNumber;
-    private Node[] children;
+    //static final int CHILDRENNUMBERMAX = ORDER;
+    //static final int DATAELEMENTSNUMBERMAX = ORDER-1;
+    //private int childrenNumber;
+    //private int dataElementsNumber;
+    private List<Node> children;
     private Node parent;
-    private DataElement[] dataElements;
+    private List<DataElement> dataElements;
     
 //CONSTRUCOR
     public Node(DataElement dataElement){
-        childrenNumber = 0;
-        dataElementsNumber = 0;
-        children = new Node[ORDER];
+        children = new ArrayList<>();
         parent = null; ///vážně možná upravit
-        dataElements = new DataElement[ORDER -1];
+        dataElements = new ArrayList<>();
         
         add(dataElement);
     }
@@ -32,9 +36,9 @@ public class Node {
 //METHODS
     public final void add(DataElement dataElement){
         if(!isFull()){
-            dataElements[dataElementsNumber] = dataElement;
-            dataElementsNumber++;
-            BubbleSort.sort(dataElements,dataElementsNumber);
+            dataElements.add(dataElement);
+            Collections.sort(dataElements);
+            //BubbleSort.sort(dataElements,dataElementsNumber);
             
          }
         else{
@@ -46,10 +50,10 @@ public class Node {
     
     public void addChild(Node child){
         if(!childrenIsFull()){
-            children[childrenNumber] = child;
-            children[childrenNumber].setParent(this); //nastaví rodiče
-            childrenNumber++;
-            BubbleSort.sort(children, childrenNumber);
+            children.add(child);
+            children.get(children.size()).setParent(this); //nastaví rodiče
+            Collections.sort(children);
+            //BubbleSort.sort(children, childrenNumber);
         }
         //DÁT SEM KONTROLU ŽE POČET DĚTÍ MUSÍ BÝT MAX POČET DAT + 1
         else{
@@ -58,15 +62,7 @@ public class Node {
     }
     
     public boolean hasChildren(){
-        if(childrenNumber == 0){
-            return false;
-        }
-        else if (childrenNumber >=0){
-            return true;
-        }
-        else{
-            throw new NodeHasChildrenException("Number of children is lover than 0!");
-        }
+        return !children.isEmpty();
     }
     
     public boolean hasParent(){
@@ -79,10 +75,10 @@ public class Node {
         
     }
     
-    public Node[] getChildren(){
+    public List<Node> getChildren(){
         return children;
     }
-    
+    /*
     public void connectChild(int childNumber, Node child) {
 	children[childNumber] = child;
 	if (child != null){
@@ -91,40 +87,40 @@ public class Node {
         }
 	
 	}
+    */
     
     public Node deleteLastChild() {
         
         //EXCEPTION NEEDED
-        var tempNode = children[childrenNumber-1];
-        children[childrenNumber-1] = null;
-        childrenNumber--;
+        var tempNode = children.get(children.size()-1);
+        children.remove(children.size()-1);
         return tempNode;
     }
     
     public Node choseChild(DataElement dataElement){
-        switch(childrenNumber){
+        switch(children.size()){
             case 4:
-                if(dataElement.getIdentifier() > dataElements[2].getIdentifier()){
-                    return children[3];
+                if(dataElement.getIdentifier() > dataElements.get(2).getIdentifier()){
+                    return children.get(3);
                 }
             case 3:
-                if(dataElement.getIdentifier() > dataElements[1].getIdentifier()){
-                    return children[2];
+                if(dataElement.getIdentifier() > dataElements.get(1).getIdentifier()){
+                    return children.get(2);
                 }
             case 2:
-                if(dataElement.getIdentifier() > dataElements[0].getIdentifier()){
-                    return children[1];
+                if(dataElement.getIdentifier() > dataElements.get(0).getIdentifier()){
+                    return children.get(1);
                 }
             case 1:
-                if(dataElement.getIdentifier() < dataElements[0].getIdentifier()){
-                    return children[0];
+                if(dataElement.getIdentifier() < dataElements.get(0).getIdentifier()){
+                    return children.get(0);
                 }
         }
         
         throw new ChoseChildException("The correct child was not chosent!");
     }
     
-    public DataElement[] getDataElements(){
+    public List<DataElement> getDataElements(){
         return dataElements;
     }
     
@@ -138,30 +134,29 @@ public class Node {
 
     
     public boolean isFull(){
-        return dataElementsNumber >= (ORDER-1);
+        return dataElements.size() >= (ORDER-1);
     }
     
     public boolean isEmpty(){
-        return dataElementsNumber == 0;
+        return dataElements.size() == 0;
     }
     
     private boolean childrenIsFull(){
-        return childrenNumber >= (ORDER);
+        return children.size() >= (ORDER);
     }
     
     public int getChildrenNumber(){
-        return childrenNumber;
+        return children.size();
     }
     
     public DataElement maxDataElement(){
-        return dataElements[dataElementsNumber-1];
+        return dataElements.get(dataElements.size()-1);
     }
     
     public DataElement deleteLastDataElement(){
         if(!isEmpty()){
-            var temp = dataElements[dataElementsNumber - 1]; // save item
-            dataElements[dataElementsNumber - 1] = null; // disconnect it
-            dataElementsNumber--; // one less item
+            var temp = dataElements.get(dataElements.size() - 1); // save item
+            dataElements.remove(dataElements.size()-1); // disconnect it
             return temp; // return item
         }
         throw new DeleteLastDataElementException("Node is empty!");
@@ -169,10 +164,9 @@ public class Node {
     
     public DataElement promote(){
         if(isFull()){
-            var temp = dataElements[1];
-            dataElements[1]=dataElements[2];
-            dataElements[2]=null;
-            dataElementsNumber--;
+            var temp = dataElements.get(1);
+            dataElements.add(1, dataElements.get(2));
+            dataElements.remove(2);
             return temp;
         }
         throw new PromoteException("Node is not full, can not be promoted!");
@@ -180,13 +174,13 @@ public class Node {
     
     public String nodeDataElemnetsToString(){
         var temp = "";
-        for(int i = 0;i<dataElementsNumber;i++){
-            temp += "["+dataElements[i].identifier+"]";
+        for(DataElement element:dataElements){
+            temp += "["+element.identifier+"]";
         }
         return temp;
     }
     
-    public Node[] getSiblings(){
+    public List<Node> getSiblings(){
         return getParent().children;
     }
     
@@ -202,15 +196,21 @@ public class Node {
         String help = "";
         help += "Node [";
         help += "ORDER:"+ORDER+" , ";
-        help += "childrenNumber:"+childrenNumber+" , ";
-        help += "dataElementsNumber:"+dataElementsNumber+" , ";
+        help += "childrenNumber:"+children.size()+" , ";
+        help += "dataElementsNumber:"+dataElements.size()+" , ";
         help += "dataElements:";
-        for(int i = 0;i<dataElementsNumber;i++){
-            help +="["+dataElements[i]+"]";
+        for(DataElement element:dataElements){
+            help +="["+element+"]";
         }
         help += "]";
         
         return help;
+    }
+
+    @Override
+    public int compareTo(Node o) {
+        
+        return maxDataElement().compareTo(o.maxDataElement());
     }
         
 }
