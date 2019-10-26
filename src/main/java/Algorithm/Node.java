@@ -51,7 +51,7 @@ public class Node implements Comparable<Node>{
     public void addChild(Node child){
         if(!childrenIsFull()){
             children.add(child);
-            children.get(children.size()).setParent(this); //nastaví rodiče
+            children.get(children.size()-1).setParent(this); //nastaví rodiče
             Collections.sort(children);
             //BubbleSort.sort(children, childrenNumber);
         }
@@ -164,8 +164,8 @@ public class Node implements Comparable<Node>{
     
     public DataElement promote(){
         if(isFull()){
-            var temp = dataElements.get(1);
-            dataElements.add(1, dataElements.get(2));
+            var temp = dataElements.get(1); //saves the middle element
+            dataElements.set(1, dataElements.get(2)); //copy the last element to second place
             dataElements.remove(2);
             return temp;
         }
