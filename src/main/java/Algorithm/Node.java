@@ -2,7 +2,6 @@ package Algorithm;
 
 //IMPORT
 import MyExceptions.*;
-import HelpClasses.BubbleSort;
 import java.util.Arrays;
 import java.util.List;
 import java.util.ArrayList;
@@ -15,47 +14,35 @@ import java.util.Collections;
 public class Node implements Comparable<Node>{
 //ATTRIBUTES
     static final int ORDER = 4;
-    //static final int CHILDRENNUMBERMAX = ORDER;
-    //static final int DATAELEMENTSNUMBERMAX = ORDER-1;
-    //private int childrenNumber;
-    //private int dataElementsNumber;
-    private List<Node> children;
-    private Node parent;
-    private List<DataElement> dataElements;
+    private List<Node> children; //list of childrens
+    private Node parent; //one node can have only one parent
+    private List<DataElement> dataElements; //list of node's data
     
 //CONSTRUCOR
-    public Node(DataElement dataElement){
+    public Node(DataElement dataElement){ //node has to be created at least with one data element
         children = new ArrayList<>();
-        parent = null; ///vážně možná upravit
+        parent = null; // new node is created without parent
         dataElements = new ArrayList<>();
-        
         add(dataElement);
     }
     
-    
 //METHODS
     public final void add(DataElement dataElement){
-        if(!isFull()){
+        if(!isFull()){ //check if the dataElements list is full
             dataElements.add(dataElement);
             Collections.sort(dataElements);
-            //BubbleSort.sort(dataElements,dataElementsNumber);
-            
-         }
+        }
         else{
             throw new DataElementAddException("Can not add data, node is full.");
         }
     }
     
-    
-    
     public void addChild(Node child){
-        if(!childrenIsFull()){
+        if(!childrenIsFull() && children.size()<=dataElements.size()){ //checks if the node isn't full of children and checks their number
             children.add(child);
-            children.get(children.size()-1).setParent(this); //nastaví rodiče
-            Collections.sort(children);
-            //BubbleSort.sort(children, childrenNumber);
+            children.get(children.size()-1).setParent(this); //set parent for new child
+            Collections.sort(children); //sort children
         }
-        //DÁT SEM KONTROLU ŽE POČET DĚTÍ MUSÍ BÝT MAX POČET DAT + 1
         else{
             throw new ChildAddException("Node has already "+ORDER+" children!");
         }
@@ -66,35 +53,22 @@ public class Node implements Comparable<Node>{
     }
     
     public boolean hasParent(){
-        if(parent == null){
-            return false;
-        }
-        else{
-            return true;
-        }
-        
+        return parent != null;
     }
     
     public List<Node> getChildren(){
         return children;
     }
-    /*
-    public void connectChild(int childNumber, Node child) {
-	children[childNumber] = child;
-	if (child != null){
-            child.parent = this;
-            childrenNumber++;
-        }
-	
-	}
-    */
     
     public Node deleteLastChild() {
-        
-        //EXCEPTION NEEDED
-        var tempNode = children.get(children.size()-1);
-        children.remove(children.size()-1);
-        return tempNode;
+        if(children.size()>0){
+            var tempNode = children.get(children.size()-1);
+            children.remove(children.size()-1);
+            return tempNode;
+        }
+        else{
+            throw DeleteLastChildException("This node has no children!");
+        }
     }
     
     public Node choseChild(DataElement dataElement){
@@ -116,8 +90,7 @@ public class Node implements Comparable<Node>{
                     return children.get(0);
                 }
         }
-        
-        throw new ChoseChildException("The correct child was not chosent!");
+        throw new ChoseChildException("The correct child was not chosen!");
     }
     
     public List<DataElement> getDataElements(){
@@ -132,13 +105,12 @@ public class Node implements Comparable<Node>{
         this.parent = parent;
     }
 
-    
     public boolean isFull(){
         return dataElements.size() >= (ORDER-1);
     }
     
     public boolean isEmpty(){
-        return dataElements.size() == 0;
+        return dataElements.isEmpty();
     }
     
     private boolean childrenIsFull(){
@@ -163,7 +135,7 @@ public class Node implements Comparable<Node>{
     }
     
     public DataElement promote(){
-        if(isFull()){
+        if(isFull()){ //can be promoted only when node is full
             var temp = dataElements.get(1); //saves the middle element
             dataElements.set(1, dataElements.get(2)); //copy the last element to second place
             dataElements.remove(2);
@@ -181,15 +153,9 @@ public class Node implements Comparable<Node>{
     }
     
     public List<Node> getSiblings(){
+        //EXCEPTION OR CORRECTION NEEDED
         return getParent().children;
     }
-    
-    
-    
-    
-    
-    
-    
     
     @Override
     public String toString(){

@@ -5,6 +5,7 @@
  */
 package Algorithm;
 
+//IMPORT
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,12 +18,12 @@ public class Tree {
     private Node root;
     private int depth;
     
-
 //CONSTRUCTOR
     public Tree(Node root){
         this.root = root;
         depth = 0;
     }
+    
     public Tree(DataElement dataElement){
         this.root = new Node(dataElement);
         depth = 0;
@@ -38,15 +39,14 @@ public class Tree {
         if(!currentNode.isFull()){ //adds dataElement into corect node
             currentNode.add(dataElement);
         }
-        //current node is full, promote algorithm have to start
+        //current node is full, split algorithm have to start
         else{
             split(currentNode,dataElement);
         }
-        
     }
     
     private void split(Node thisNode, DataElement data){ // split the node
-        
+        //EXCEPTION HAS TO BE CALLED ONLY WHEN NODE IS FULL
         //Node is root
 	if(!thisNode.hasParent()){ 
             root = new Node(thisNode.promote()); // create new node (root) with dataElement promote (middle dataElement from old Node is deleted)
@@ -65,73 +65,59 @@ public class Tree {
         //Node is not root
         else{
             //Parent of thisNode is not full, so promote can be saved to it
-            if(!thisNode.getParent().isFull()){ 
-               thisNode.getParent().add(thisNode.promote()); //Promote is saved to parent
+            var parent = thisNode.getParent();
+            if(!parent.isFull()){ 
+               parent.add(thisNode.promote()); //Promote is saved to parent
                var rightNode = new Node(thisNode.deleteLastDataElement()); //last element is used to create right node
                //Connect new Node to parent
-               thisNode.getParent().addChild(rightNode);
+               parent.addChild(rightNode);
                //Reconect children to rightNode
-               for(int i = thisNode.getChildrenNumber();i>1;i--){ //Maximal last two children (2,3) from first Node are deleted and moved to new one
+               for(int i = thisNode.getChildrenNumber();i>2;i--){ //Maximal last two children (2,3) from first Node are deleted and moved to new one
                    rightNode.addChild(thisNode.deleteLastChild());
                }
                //Add dataElement to tree
-                thisNode.getParent().choseChild(data).add(data); //chyba
+                parent.choseChild(data).add(data);
                
             }
             //Parent of thisNode is full, needs to be splited -> recursive use of split function
             else{
-                split(thisNode.getParent(),thisNode.promote());
+                split(parent,thisNode.promote());
                 var rightNode = new Node(thisNode.deleteLastDataElement()); //last element is used to create right node
                //Connect new Node to parent
-               thisNode.getParent().addChild(rightNode);
+               parent.addChild(rightNode);
                //Reconect children to rightNode
-               for(int i = thisNode.getChildrenNumber();i>1;i--){ //Maximal last two children from first Node are deleted and moved to new one
+               for(int i = thisNode.getChildrenNumber();i>2;i--){ //Maximal last two children from first Node are deleted and moved to new one
                    rightNode.addChild(thisNode.deleteLastChild());
                }
                //Add dataElement to tree
-                thisNode.getParent().choseChild(data).add(data);
-                
+                parent.choseChild(data).add(data);
             }
         }
     }
-    
     
     public String getOneLevelAsString(int depth){
         List<Node> parents;
         String tempString = "";
         var temp = root;
-        int ch = 0;
-        int p =0;
+        
         if(depth==0){
             return root.nodeDataElemnetsToString();
         }
         else if(depth==1){
             for(Node child:temp.getChildren()){
-                ch++;
                 tempString += (child.nodeDataElemnetsToString()+"     ");
-                if(ch>=temp.getChildrenNumber()){
-                        break;
-                }
              }
             return tempString;
         }
+        //CHYBA PRAVDĚPODOBNĚ NEBUDE ČÍST VŠE
         else if(depth>1) {
             for(int i = 0;i<(depth-2);i++){ //looks for grandparents in depth - 2
                 temp = temp.getChildren().get(0);
             }
             parents = temp.getChildren();
             for(Node parent:parents){ //Could be done more effitiently
-                ch=0;
-                p++;
                 for(Node child:parent.getChildren()){
-                    ch++;
                     tempString += (child.nodeDataElemnetsToString()+"     ");
-                    if(ch>=parent.getChildrenNumber()){
-                        break;
-                    }
-                }
-                if(p>=temp.getChildrenNumber()){
-                    break;
                 }
             }
             return tempString;    
