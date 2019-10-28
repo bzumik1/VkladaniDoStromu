@@ -67,7 +67,7 @@ public class Node implements Comparable<Node>{
             return tempNode;
         }
         else{
-            throw DeleteLastChildException("This node has no children!");
+            throw new DeleteLastChildException("This node has no children!");
         }
     }
     

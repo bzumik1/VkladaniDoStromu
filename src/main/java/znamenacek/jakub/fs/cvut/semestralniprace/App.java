@@ -24,7 +24,7 @@ public class App {//extends Application {
         var aL = new ArrayList<Integer>();
         System.out.println(aL.size());
         
-        System.out.println("TISKNUUUUU");
+        System.out.println("Priiiiiiiiint");
         System.out.println(n1);
         
         
