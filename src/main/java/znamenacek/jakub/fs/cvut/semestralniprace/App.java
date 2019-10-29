@@ -67,7 +67,7 @@ public class App extends Application {
         var button = new Button("pokus");
         var root = new VBox(10);
         root.setAlignment(Pos.CENTER);
-        root.getChildren().addAll(root);
+        root.getChildren().add(button);
 
         var scene = new Scene(root,600,600);
         stage.setScene(scene);
