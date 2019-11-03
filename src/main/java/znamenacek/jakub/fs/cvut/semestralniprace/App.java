@@ -58,7 +58,7 @@ public class App extends Application {
         //System.out.println(tree.getRoot().getChildren()[0]);
         System.out.println(tree);
 
-        launch(args);
+        //launch(args);
         
     }
 

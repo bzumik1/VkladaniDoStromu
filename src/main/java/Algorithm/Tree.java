@@ -6,6 +6,7 @@
 package Algorithm;
 
 //IMPORT
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -94,35 +95,7 @@ public class Tree {
         }
     }
     
-    public String getOneLevelAsString(int depth){
-        List<Node> parents;
-        String tempString = "";
-        var temp = root;
-        
-        if(depth==0){
-            return root.nodeDataElemnetsToString();
-        }
-        else if(depth==1){
-            for(Node child:temp.getChildren()){
-                tempString += (child.nodeDataElemnetsToString()+"     ");
-             }
-            return tempString;
-        }
-        //CHYBA PRAVDĚPODOBNĚ NEBUDE ČÍST VŠE
-        else if(depth>1) {
-            for(int i = 0;i<(depth-2);i++){ //looks for grandparents in depth - 2
-                temp = temp.getChildren().get(0);
-            }
-            parents = temp.getChildren();
-            for(Node parent:parents){ //Could be done more effitiently
-                for(Node child:parent.getChildren()){
-                    tempString += (child.nodeDataElemnetsToString()+"     ");
-                }
-            }
-            return tempString;    
-        }
-        return "PROBLEM";
-    }
+
     
     public Node getRoot(){
         return root;
@@ -130,10 +103,30 @@ public class Tree {
     
     @Override
     public String toString(){
-        String tempString = "";
+        var tempString = "";
+        List<Node> childrenAtOneLevel = new ArrayList<>();
+        List<Node> tempChildrenAtOneLevel = new ArrayList<>();
+
+        tempString += root.nodeDataElemnetsToString()+"\n"; //first row toString
+
+        for(Node child:root.getChildren()){ //second row toString
+            tempString += child.nodeDataElemnetsToString()+"   ";
+            for(Node grandChild: child.getChildren()){
+                childrenAtOneLevel.add(grandChild);
+            }
+        }
+        tempString += "\n";
         
         for(int i=0;i<=depth;i++){
-            tempString += (getOneLevelAsString(i)+"\n");
+            for(Node child: childrenAtOneLevel){
+                tempString += child.nodeDataElemnetsToString()+"   ";
+                for(Node grandChild: child.getChildren()){
+                    tempChildrenAtOneLevel.add(grandChild);
+                }
+            }
+            tempString += "\n";
+            childrenAtOneLevel = tempChildrenAtOneLevel;
+            tempChildrenAtOneLevel = new ArrayList<>();
         }
         return tempString;
     }
