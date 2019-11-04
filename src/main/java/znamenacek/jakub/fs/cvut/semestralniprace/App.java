@@ -5,6 +5,7 @@ package znamenacek.jakub.fs.cvut.semestralniprace;
   import javafx.scene.Scene;
   import javafx.scene.control.Button;
   import javafx.scene.control.Label;
+  import javafx.scene.layout.HBox;
   import javafx.scene.layout.StackPane;
   import javafx.scene.layout.VBox;
   import javafx.stage.Stage;
@@ -13,11 +14,13 @@ import Algorithm.Node;
 import Algorithm.DataElement;
 import Algorithm.Tree;
 import java.util.ArrayList;
+  import java.util.List;
 
 /**
  * JavaFX App
  */
 public class App extends Application {
+    private static Tree tree;
 
     
 
@@ -34,31 +37,31 @@ public class App extends Application {
         //TEST NODE
         System.out.println("TEST");
         System.out.println("CREATE TREE");
-        var tree = new Tree(new DataElement(3));
-        tree.add(new DataElement(7));
-        tree.add(new DataElement(4));
-        tree.add(new DataElement(9));
-        tree.add(new DataElement(10));
-        tree.add(new DataElement(0));
-        tree.add(new DataElement(5));
-        tree.add(new DataElement(6));
-        tree.add(new DataElement(8));
-        tree.add(new DataElement(2));
-        tree.add(new DataElement(1));
-        tree.add(new DataElement(20));
-        tree.add(new DataElement(15));
-        tree.add(new DataElement(14));
-        tree.add(new DataElement(12));
+        var treeStatic = new Tree(new DataElement(3));
+        treeStatic.add(new DataElement(7));
+        treeStatic.add(new DataElement(4));
+        treeStatic.add(new DataElement(9));
+        treeStatic.add(new DataElement(10));
+        treeStatic.add(new DataElement(0));
+        treeStatic.add(new DataElement(5));
+        treeStatic.add(new DataElement(6));
+        treeStatic.add(new DataElement(8));
+        treeStatic.add(new DataElement(2));
+        treeStatic.add(new DataElement(1));
+        treeStatic.add(new DataElement(20));
+        treeStatic.add(new DataElement(15));
+        treeStatic.add(new DataElement(14));
+        treeStatic.add(new DataElement(12));
         
-        
+        tree = treeStatic;
         //System.out.println(tree.getRoot().getChildren()[1].getChildren()[0].getSiblings()[0].nodeDataElemnetsToString());
         
         
         System.out.println("PRINT TREE");
         //System.out.println(tree.getRoot().getChildren()[0]);
-        System.out.println(tree);
+        System.out.println(treeStatic);
 
-        //launch(args);
+        launch(args);
         
     }
 
@@ -67,7 +70,45 @@ public class App extends Application {
         var button = new Button("pokus");
         var root = new VBox(10);
         root.setAlignment(Pos.CENTER);
-        root.getChildren().add(button);
+
+
+
+
+
+
+        List<HBox> rows = new ArrayList<>();
+        rows.add(new HBox(new Button(tree.getRoot().nodeDataElemnetsToString())));
+        rows.get(rows.size()-1).setAlignment(Pos.CENTER);
+
+
+        List<Node> childrenAtOneLevel = new ArrayList<>(tree.getRoot().getChildren());
+            List<Node> tempChildrenAtOneLevel = new ArrayList<>();
+
+            for(int i=0;i<tree.getDepth();i++){ //MISTAKE DEFINE DEPTH ON SEPARATE ROW
+                rows.add(new HBox(10));
+                rows.get(rows.size()-1).setAlignment(Pos.CENTER);
+                for(Node child: childrenAtOneLevel){
+                    rows.get(rows.size()-1).getChildren().add(new Button(child.nodeDataElemnetsToString()));
+                    for(Node grandChild: child.getChildren()){
+                        tempChildrenAtOneLevel.add(grandChild);
+                    }
+                }
+                childrenAtOneLevel = tempChildrenAtOneLevel;
+                tempChildrenAtOneLevel = new ArrayList<>();
+            }
+
+
+
+            for(HBox row: rows){
+                root.getChildren().add(row);
+            }
+
+
+
+
+
+
+
 
         var scene = new Scene(root,600,600);
         stage.setScene(scene);

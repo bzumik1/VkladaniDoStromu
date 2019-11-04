@@ -100,31 +100,25 @@ public class Tree {
     public Node getRoot(){
         return root;
     }
+
+    public int getDepth(){
+        return depth;
+    }
     
     @Override
     public String toString(){
-        var tempString = "";
-        List<Node> childrenAtOneLevel = new ArrayList<>();
+        var tempString = root.nodeDataElemnetsToString()+"\n"; //first row as String
+        List<Node> childrenAtOneLevel = new ArrayList<>(root.getChildren());
         List<Node> tempChildrenAtOneLevel = new ArrayList<>();
 
-        tempString += root.nodeDataElemnetsToString()+"\n"; //first row toString
-
-        for(Node child:root.getChildren()){ //second row toString
-            tempString += child.nodeDataElemnetsToString()+"   ";
-            for(Node grandChild: child.getChildren()){
-                childrenAtOneLevel.add(grandChild);
-            }
-        }
-        tempString += "\n";
-        
-        for(int i=0;i<=depth;i++){
+        for(int i=0;i<depth;i++){ //goes through all rows
             for(Node child: childrenAtOneLevel){
                 tempString += child.nodeDataElemnetsToString()+"   ";
                 for(Node grandChild: child.getChildren()){
                     tempChildrenAtOneLevel.add(grandChild);
                 }
             }
-            tempString += "\n";
+            tempString += "\n"; //end of the row
             childrenAtOneLevel = tempChildrenAtOneLevel;
             tempChildrenAtOneLevel = new ArrayList<>();
         }
