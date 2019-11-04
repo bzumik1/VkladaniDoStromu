@@ -1,22 +1,23 @@
 package GraphicalUserInterface;
 
 import Algorithm.DataElement;
+import javafx.geometry.Pos;
 import javafx.scene.Group;
+import javafx.scene.layout.StackPane;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 
-public class DataElementGUI extends Group {
-    Text identifier;
-    Square boundary;
+public class DataElementGUI extends StackPane {
+    private Text identifier;
+    private Square boundary;
 
     public DataElementGUI (DataElement dataElement){
         super();
+        super.setAlignment(Pos.CENTER);
         boundary = new Square(50,2);
         identifier = new Text(dataElement.identifierToString());
-        identifier.setTextAlignment(TextAlignment.CENTER);
-        identifier.setX(boundary.getCenter().getX());
-        identifier.setY(boundary.getCenter().getY());
         super.getChildren().addAll(identifier,boundary);
+
     }
 
     public Text getIdentifier() {
@@ -34,4 +35,6 @@ public class DataElementGUI extends Group {
     public void setBoundary(Square boundary) {
         this.boundary = boundary;
     }
+
+
 }

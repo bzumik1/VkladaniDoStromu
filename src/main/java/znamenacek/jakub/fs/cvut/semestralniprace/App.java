@@ -1,5 +1,6 @@
 package znamenacek.jakub.fs.cvut.semestralniprace;
 
+  import GraphicalUserInterface.NodeGUI;
   import GraphicalUserInterface.TreeGUI;
   import javafx.application.Application;
   import javafx.geometry.Pos;
@@ -61,7 +62,8 @@ public class App extends Application {
         System.out.println("PRINT TREE");
         //System.out.println(tree.getRoot().getChildren()[0]);
         System.out.println(treeStatic);
-        System.out.println("POčet dataelementu v rootu "+ tree.getRoot().childrensDataElementsNumber());
+        var myNode = new NodeGUI(tree.getRoot());
+        System.out.println("Sirka nodu "+ myNode.getWidth());
 
         launch(args);
         
@@ -71,7 +73,7 @@ public class App extends Application {
     public void start(Stage stage) throws Exception {
         var treeGUI = new TreeGUI(tree);
 
-        var scene = new Scene(treeGUI,600,600);
+        var scene = new Scene(treeGUI.createTree(tree.getRoot()),600,600);
         stage.setScene(scene);
         stage.show();
         stage.setTitle("pokus");

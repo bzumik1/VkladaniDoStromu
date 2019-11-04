@@ -12,8 +12,16 @@ import Algorithm.Tree;
 public class TreeGUI extends VBox {
 
     public TreeGUI (Tree tree){
+        super();
+
+
+        /*
+        //Create and configure VBox
         super(30);
         super.setAlignment(Pos.CENTER);
+
+
+        //Create root
         List<HBox> rows = new ArrayList<>();
         rows.add(new NodeGUI(tree.getRoot()));
         rows.get(rows.size()-1).setAlignment(Pos.CENTER);
@@ -40,5 +48,27 @@ public class TreeGUI extends VBox {
         for(HBox row: rows){
             super.getChildren().add(row);
         }
+
+         */
     }
-}
+
+    public VBox createTree(Node root){
+        VBox vbox = new VBox(30);
+        vbox.setAlignment(Pos.CENTER);
+        HBox hbox = new HBox(30);
+        hbox.setAlignment(Pos.CENTER);
+        if(root.hasChildren()){
+            for(Node child:root.getChildren()){
+                hbox.getChildren().add(createTree(child));
+            }
+            vbox.getChildren().addAll(new NodeGUI(root),hbox);
+        }
+        else {
+            vbox.getChildren().add(new NodeGUI(root));
+        }
+
+
+        return vbox;
+    }
+    }
+
