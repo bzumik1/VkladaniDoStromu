@@ -156,6 +156,15 @@ public class Node implements Comparable<Node>{
         //EXCEPTION OR CORRECTION NEEDED
         return getParent().children;
     }
+
+    //PROBBABLY DELETE
+    public int childrensDataElementsNumber(){
+        int temp = 0;
+        for(Node child:children){
+            temp+=child.dataElements.size();
+        }
+        return temp;
+    }
     
     @Override
     public String toString(){

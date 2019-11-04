@@ -23,6 +23,10 @@ public class DataElement implements Comparable<DataElement>{
     public int getIdentifier(){
         return identifier;
     }
+
+    public String identifierToString(){
+        return ""+identifier;
+    }
     
     @Override
     public String toString(){

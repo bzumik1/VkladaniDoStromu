@@ -1,5 +1,6 @@
 package znamenacek.jakub.fs.cvut.semestralniprace;
 
+  import GraphicalUserInterface.TreeGUI;
   import javafx.application.Application;
   import javafx.geometry.Pos;
   import javafx.scene.Scene;
@@ -60,6 +61,7 @@ public class App extends Application {
         System.out.println("PRINT TREE");
         //System.out.println(tree.getRoot().getChildren()[0]);
         System.out.println(treeStatic);
+        System.out.println("POčet dataelementu v rootu "+ tree.getRoot().childrensDataElementsNumber());
 
         launch(args);
         
@@ -67,50 +69,9 @@ public class App extends Application {
 
     @Override
     public void start(Stage stage) throws Exception {
-        var button = new Button("pokus");
-        var root = new VBox(10);
-        root.setAlignment(Pos.CENTER);
+        var treeGUI = new TreeGUI(tree);
 
-
-
-
-
-
-        List<HBox> rows = new ArrayList<>();
-        rows.add(new HBox(new Button(tree.getRoot().nodeDataElemnetsToString())));
-        rows.get(rows.size()-1).setAlignment(Pos.CENTER);
-
-
-        List<Node> childrenAtOneLevel = new ArrayList<>(tree.getRoot().getChildren());
-            List<Node> tempChildrenAtOneLevel = new ArrayList<>();
-
-            for(int i=0;i<tree.getDepth();i++){ //MISTAKE DEFINE DEPTH ON SEPARATE ROW
-                rows.add(new HBox(10));
-                rows.get(rows.size()-1).setAlignment(Pos.CENTER);
-                for(Node child: childrenAtOneLevel){
-                    rows.get(rows.size()-1).getChildren().add(new Button(child.nodeDataElemnetsToString()));
-                    for(Node grandChild: child.getChildren()){
-                        tempChildrenAtOneLevel.add(grandChild);
-                    }
-                }
-                childrenAtOneLevel = tempChildrenAtOneLevel;
-                tempChildrenAtOneLevel = new ArrayList<>();
-            }
-
-
-
-            for(HBox row: rows){
-                root.getChildren().add(row);
-            }
-
-
-
-
-
-
-
-
-        var scene = new Scene(root,600,600);
+        var scene = new Scene(treeGUI,600,600);
         stage.setScene(scene);
         stage.show();
         stage.setTitle("pokus");
