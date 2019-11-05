@@ -1,15 +1,20 @@
 package znamenacek.jakub.fs.cvut.semestralniprace;
 
+  import GraphicalUserInterface.DataElementGUI;
   import GraphicalUserInterface.NodeGUI;
+  import GraphicalUserInterface.Square;
   import GraphicalUserInterface.TreeGUI;
   import javafx.application.Application;
+  import javafx.geometry.Bounds;
   import javafx.geometry.Pos;
+  import javafx.scene.Group;
   import javafx.scene.Scene;
   import javafx.scene.control.Button;
   import javafx.scene.control.Label;
   import javafx.scene.layout.HBox;
   import javafx.scene.layout.StackPane;
   import javafx.scene.layout.VBox;
+  import javafx.scene.shape.Line;
   import javafx.stage.Stage;
 
 import Algorithm.Node;
@@ -62,17 +67,53 @@ public class App extends Application {
         System.out.println("PRINT TREE");
         //System.out.println(tree.getRoot().getChildren()[0]);
         System.out.println(treeStatic);
-        var myNode = new NodeGUI(tree.getRoot());
-        System.out.println("Sirka nodu "+ myNode.getWidth());
 
         launch(args);
+
         
     }
 
     @Override
     public void start(Stage stage) throws Exception {
         var treeGUI = new TreeGUI(tree);
+        var text1 = new Label();
+        var square1 = new Square(100,2);
+        square1.setOnMouseDragged(e -> {
+                                            square1.setX(e.getX());
+                                            square1.setY(e.getY());
+        });
+        var square2 = new Square(100,2);
+        square2.setOnMouseDragged(e -> {
+                                            square2.setX(e.getX());
+                                            square2.setY(e.getY());
+        });
 
+        var line = new Line();
+        var line1 = new Line(0,0,100,100);
+        line.startXProperty().bind(square1.centerXProperty);
+        line.startYProperty().bind(square1.centerYProperty);
+        line.endXProperty().bind(square2.centerXProperty);
+        line.endYProperty().bind(square2.centerYProperty);
+        text1.setText("");
+
+        var root = new VBox(20);
+        var vbox = new VBox(40);
+        var group = new Group();
+        group.maxWidth(300);
+        group.maxHeight(300);
+        root.setAlignment(Pos.CENTER);
+
+        vbox.getChildren().addAll(square1,square2);
+        group.getChildren().addAll(vbox,line1);
+        vbox.setLayoutX(100);
+        vbox.setLayoutY(100);
+
+
+        //root.getChildren().addAll(group);
+
+
+
+        //var scene = new Scene(treeGUI.createTree(tree.getRoot()),600,600);
         var scene = new Scene(treeGUI.createTree(tree.getRoot()),600,600);
         stage.setScene(scene);
         stage.show();
