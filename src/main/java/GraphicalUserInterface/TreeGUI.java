@@ -16,16 +16,18 @@ import javafx.scene.shape.Line;
 public class TreeGUI extends Group {
     double xDimension;
     double yDimension;
-    double dataElementHight = 40; // HAS TO BE DINAMIC NOT STATIC EDIT
+    double dataElementHight = 50; // HAS TO BE DINAMIC NOT STATIC EDIT
     double xSpacing = 40; //HAS TO BE DIMAMIC NOT STATIC EDIT
     double ySpacing = 70; //HAS TO BE DIMAMIC NOT STATIC EDIT
 
     public TreeGUI (Node root){
         super();
         Node parent = root;
+        int dataElementNumber = parent.getDataElements().size();
         NodeGUI parentGUI = new NodeGUI(parent);
         xDimension = 0;
-        //var group = new Group();
+        yDimension = 0;
+        List<Line> lineList = new ArrayList<>();
 
 
 
@@ -35,21 +37,37 @@ public class TreeGUI extends Group {
                 super.getChildren().add(childTree); //add new tree to tree above it
                 childTree.setLayoutX(xDimension); //set xDimension (for the first child O)
                 childTree.setLayoutY(dataElementHight + ySpacing); //set yDimension
+                lineList.add(new Line(0,0,(xDimension+(childTree.xDimension/2.0)),(dataElementHight + ySpacing)));
+                super.getChildren().add(lineList.get(lineList.size()-1));
+                yDimension = childTree.getyDimension(); //WORKS BUT CORRECT THIS WALUE IS SET MANY TIMES
+
                 xDimension += childTree.getxDimension(); //add width of current child
                 xDimension += xSpacing;
 
             }
             xDimension -=xSpacing; //delete last spacing
+            yDimension +=ySpacing; //add spacing to y Dimension
 
         }
         // give parent in the group
         super.getChildren().add(parentGUI);
         if(xDimension!=0){
-            parentGUI.setLayoutX((xDimension-parentGUI.getXDimension())/2);
+            parentGUI.setLayoutX((xDimension-parentGUI.getxDimension())/2);
+        }
+        else{
+            xDimension+=parentGUI.getxDimension(); //MISTAKE?!?
+        }
+        double xPosition = (xDimension-parentGUI.getxDimension())/2;
+        for(Line line:lineList){
+            line.setStroke(Color.RED); //CREATE PROPERTY FOR THIS
+            line.setStrokeWidth(3); //CREATE PROPERTY FOR THIS
+            line.setStartX(xPosition);
+            line.setStartY(dataElementHight);
+            xPosition += dataElementHight; //MISSING SPACING BETWEEN DATA ELEMENTS
         }
 
-        parentGUI.setLayoutY(0);
-        xDimension+=parentGUI.getXDimension(); //MISTAKE?!?
+
+        yDimension+=parentGUI.getyDimension();
 
 
 

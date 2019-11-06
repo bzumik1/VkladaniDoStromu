@@ -114,7 +114,7 @@ public class App extends Application {
 
 
         //var scene = new Scene(treeGUI.createTree(tree.getRoot()),600,600);
-        var scene = new Scene(new TreeGUI(tree.getRoot()),600,600);
+        var scene = new Scene(new TreeGUI(tree.getRoot()),1200,600);
         stage.setScene(scene);
         stage.show();
         stage.setTitle("pokus");
