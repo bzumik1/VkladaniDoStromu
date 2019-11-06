@@ -75,7 +75,7 @@ public class App extends Application {
 
     @Override
     public void start(Stage stage) throws Exception {
-        var treeGUI = new TreeGUI(tree);
+        //var treeGUI = new TreeGUI();
         var text1 = new Label();
         var square1 = new Square(100,2);
         square1.setOnMouseDragged(e -> {
@@ -114,7 +114,7 @@ public class App extends Application {
 
 
         //var scene = new Scene(treeGUI.createTree(tree.getRoot()),600,600);
-        var scene = new Scene(treeGUI.createTree(tree.getRoot()),600,600);
+        var scene = new Scene(new TreeGUI(tree.getRoot()),600,600);
         stage.setScene(scene);
         stage.show();
         stage.setTitle("pokus");

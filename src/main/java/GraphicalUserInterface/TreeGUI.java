@@ -13,48 +13,55 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
 
 
-public class TreeGUI extends VBox {
+public class TreeGUI extends Group {
+    double xDimension;
+    double yDimension;
+    double dataElementHight = 40; // HAS TO BE DINAMIC NOT STATIC EDIT
+    double xSpacing = 40; //HAS TO BE DIMAMIC NOT STATIC EDIT
+    double ySpacing = 70; //HAS TO BE DIMAMIC NOT STATIC EDIT
 
-    public TreeGUI (Tree tree){
+    public TreeGUI (Node root){
         super();
+        Node parent = root;
+        NodeGUI parentGUI = new NodeGUI(parent);
+        xDimension = 0;
+        //var group = new Group();
 
 
-        /*
-        //Create and configure VBox
-        super(30);
-        super.setAlignment(Pos.CENTER);
 
+        if(parent.hasChildren()){
+            for(Node child:parent.getChildren()){
+                var childTree = new TreeGUI(child); //create new tree
+                super.getChildren().add(childTree); //add new tree to tree above it
+                childTree.setLayoutX(xDimension); //set xDimension (for the first child O)
+                childTree.setLayoutY(dataElementHight + ySpacing); //set yDimension
+                xDimension += childTree.getxDimension(); //add width of current child
+                xDimension += xSpacing;
 
-        //Create root
-        List<HBox> rows = new ArrayList<>();
-        rows.add(new NodeGUI(tree.getRoot()));
-        rows.get(rows.size()-1).setAlignment(Pos.CENTER);
-
-
-        List<Node> childrenAtOneLevel = new ArrayList<>(tree.getRoot().getChildren());
-        List<Node> tempChildrenAtOneLevel = new ArrayList<>();
-
-        for(int i=0;i<tree.getDepth();i++){ //MISTAKE DEFINE DEPTH ON SEPARATE ROW
-            rows.add(new HBox(20));
-            rows.get(rows.size()-1).setAlignment(Pos.CENTER);
-            for(Node child: childrenAtOneLevel){
-                rows.get(rows.size()-1).getChildren().add(new NodeGUI(child));
-                for(Node grandChild: child.getChildren()){
-                    tempChildrenAtOneLevel.add(grandChild);
-                }
             }
-            childrenAtOneLevel = tempChildrenAtOneLevel;
-            tempChildrenAtOneLevel = new ArrayList<>();
+            xDimension -=xSpacing; //delete last spacing
+
+        }
+        // give parent in the group
+        super.getChildren().add(parentGUI);
+        if(xDimension!=0){
+            parentGUI.setLayoutX((xDimension-parentGUI.getXDimension())/2);
+        }
+
+        parentGUI.setLayoutY(0);
+        xDimension+=parentGUI.getXDimension(); //MISTAKE?!?
+
+
+
+
+
+
         }
 
 
 
-        for(HBox row: rows){
-            super.getChildren().add(row);
-        }
 
-         */
-    }
+
 
     public VBox createTree(Node root){
         //create temporary vbox and hbox
@@ -80,37 +87,47 @@ public class TreeGUI extends VBox {
         return vbox;
     }
 
-    public Group createFamilyTree(Node parent){
-        NodeGUI parentGUI = new NodeGUI(parent);
-        var group = new Group();
-        double maxWidth = 0;
-        double dataElementHight = 40; // HAS TO BE DINAMIC NOT STATIC EDIT
-        double xSpacing = 40; //HAS TO BE DIMAMIC NOT STATIC EDIT
-        double ySpacing = 70; //HAS TO BE DIMAMIC NOT STATIC EDIT
 
 
-        if(parent.hasChildren()){
-            for(Node child:parent.getChildren()){
-                var childGUI = new NodeGUI(child);
-                group.getChildren().add(childGUI);
-                childGUI.setLayoutX(maxWidth);
-                childGUI.setLayoutY(dataElementHight + ySpacing);
-                maxWidth += childGUI.getXDimension(); //add width of current child
-                maxWidth += xSpacing;
 
-            }
-            maxWidth -=xSpacing; //delete last spacing
-
-        }
-
-        group.getChildren().add(parentGUI);
-        parentGUI.setLayoutX((maxWidth-parentGUI.getXDimension())/2);
-        parentGUI.setLayoutY(0);
-
-
-        return group;
+    public double getxDimension() {
+        return xDimension;
     }
 
-
+    public void setxDimension(double xDimension) {
+        this.xDimension = xDimension;
     }
+
+    public double getyDimension() {
+        return yDimension;
+    }
+
+    public void setyDimension(double yDimension) {
+        this.yDimension = yDimension;
+    }
+
+    public double getDataElementHight() {
+        return dataElementHight;
+    }
+
+    public void setDataElementHight(double dataElementHight) {
+        this.dataElementHight = dataElementHight;
+    }
+
+    public double getxSpacing() {
+        return xSpacing;
+    }
+
+    public void setxSpacing(double xSpacing) {
+        this.xSpacing = xSpacing;
+    }
+
+    public double getySpacing() {
+        return ySpacing;
+    }
+
+    public void setySpacing(double ySpacing) {
+        this.ySpacing = ySpacing;
+    }
+}
 
