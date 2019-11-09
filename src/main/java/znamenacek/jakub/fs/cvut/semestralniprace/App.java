@@ -6,11 +6,14 @@ package znamenacek.jakub.fs.cvut.semestralniprace;
   import GraphicalUserInterface.TreeGUI;
   import javafx.application.Application;
   import javafx.geometry.Bounds;
+  import javafx.geometry.Insets;
   import javafx.geometry.Pos;
   import javafx.scene.Group;
   import javafx.scene.Scene;
   import javafx.scene.control.Button;
+  import javafx.scene.control.ButtonBar;
   import javafx.scene.control.Label;
+  import javafx.scene.layout.Border;
   import javafx.scene.layout.HBox;
   import javafx.scene.layout.StackPane;
   import javafx.scene.layout.VBox;
@@ -81,18 +84,24 @@ public class App extends Application {
     @Override
     public void start(Stage stage) throws Exception {
         var treeGUI = new TreeGUI(tree.getRoot());
-        var root = new VBox(20);
+        var root = new VBox(100);
         var hBox = new HBox(10);
+        var buttonBar = new ButtonBar();
+        var vBox = new VBox(10);
         var nextButton = new Button ("další");
         var previousButton = new Button ("předchozí");
         var wholeButton = new Button("celý strom");
         var startButton = new Button("start");
 
-        hBox.getChildren().addAll(startButton, wholeButton,nextButton,previousButton);
-        hBox.setAlignment(Pos.CENTER);
+        buttonBar.getButtons().addAll(startButton,wholeButton,previousButton,nextButton);
+        hBox.setAlignment(Pos.BOTTOM_CENTER);
 
-        root.getChildren().addAll(treeGUI,hBox);
+        vBox.getChildren().add(treeGUI);
+        vBox.setAlignment(Pos.CENTER);
+
+        root.getChildren().addAll(vBox,buttonBar);
         root.setAlignment(Pos.CENTER);
+        root.setPadding(new Insets(30, 10, 30, 10));
 
 
 
@@ -110,6 +119,7 @@ public class App extends Application {
 
 
 
+        //buttons setings
         nextButton.setOnAction(e -> {
             tree = new Tree(new DataElement(dataElementArray[0]));
             currentState++;
